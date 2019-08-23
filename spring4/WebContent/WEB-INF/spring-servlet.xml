@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd ">
+   <bean id="default-handler-mapping" class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping"/>
+	<!--  오전 수업 = == 오늘 공부 할것  -->
+  <bean id="url-mapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+		 <property name="mappings">
+         	<props>
+           	 <prop key="/test/testList.sp4">test-controller</prop>
+           	 <prop key="/test/testAdd.sp4">test-controller</prop>
+           	 <prop key="/test/testUdp.sp4">test-controller</prop>
+          	 <prop key="/test/testDel.sp4">test-controller</prop>
+           	 <prop key="/test/memList.sp4">member-controller</prop>
+           	 <prop key="/member/memList2.sp4">member-controller</prop>
+           	 <prop key="/member/memList3.sp4">member-controller</prop>
+           	 <prop key="/erp/doEmp.sp4">emp-controller</prop>
+           	 <prop key="/erp/deptList.sp4">dept-controller</prop>
+        	</props>
+      </property>
+  
+  
+  
+   </bean>
+   
+   <bean name="emp-controller" class="com.erp.EmpController">
+   		<property name="methodNameResolver" ref="test-resolver"/>
+   		<property name="empLogic" ref="emp-Logic"/> 
+   	</bean>
+   	
+   	   <bean name="dept-controller" class="com.erp.DeptController">
+   		<property name="methodNameResolver" ref="test-resolver"/>
+   	 	<property name="deptLogic" ref="dept-Logic"/> 
+   </bean>
+   
+   <bean name="test-controller" class="com.test.TestController">
+      <property name="methodNameResolver" ref="test-resolver"/>
+      <property name="testLogic" ref="test-logic" />
+   </bean>
+   <bean name="member-controller" class="com.test.MemberController">
+   		<property name="methodNameResolver" ref="test-resolver"/>
+   		<property name="memLogic" ref="mem-Logic"/>
+   </bean>
+   <bean id="test-resolver" class="org.springframework.web.servlet.mvc.multiaction.PropertiesMethodNameResolver">
+   <!-- <bean id="test-resolver" class="org.springframework.mvc.multiaction.PropertiesMethodNameResolver" > -->
+      <property name="mappings">
+         <props>
+            <prop key="/test/testList.sp4">testList</prop>
+            <prop key="/test/testAdd.sp4">testAdd</prop>
+            <prop key="/test/testUdp.sp4">testUdp</prop>
+            <prop key="/test/testDel.sp4">testDel</prop>
+            <prop key="/test/memList.sp4">memList</prop>
+            <prop key="/member/memList2.sp4">memList2</prop>
+            <prop key="/member/memList3.sp4">memList3</prop>
+            <prop key="/erp/doEmp.sp4">doEmp</prop>
+            <prop key="/erp/deptList.sp4">deptList</prop>
+         </props>
+      </property>
+   </bean>
+ 	<!--=================================여기까지 ================================================================================== --> 
+ 	 <bean name="/di/hello.sp4" class="com.di.InsaController"/>
+ 	 <bean name="/di/insaList.sp4" class="com.di.ListController">
+   		<property name="listBean">
+   			<list>
+   				<value>Hi!</value>
+   				<value>Have a good Time!</value>
+   				<value>Have a nice day!</value>
+   			</list>
+   		</property>
+   </bean>
+   	<bean name="/di/ComplexObject.sp4" class="com.di.ComplexObjectController"></bean>
+ 
+ 	
+ 	 <!--  
+ 	 	스프링에서는 xxxcontroller가 응답받은 내용을 반드시 DispatcherServlet에게 전달해야함.
+ 	 	응답페이지에 대한 호출은 xxxcontroller의 책임이 아니라 DispatcherServlet에서 요청처리함.
+ 	 	따라서 xxxcontroller는 업무에 맞는 페이지 이름만 전달하면됨.
+ 	 	전달할떄는 ModelAndView에 담아서 전달함.
+ 	 -->
+ 	 <!-- 자바에 가꼬와서 웹에띄우는 코드  -->
+     <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+   <property name="prefix" value="/WEB-INF/view/"/>
+   <!-- <value>/WEB-INF/view/</value> -->
+      <property name="suffix" value=".jsp"/>
+     <!-- <value>.jsp</value> -->
+      </bean>
+</beans>
